@@ -33,6 +33,7 @@ function CreateCabinForm() {
     <Form onSubmit={handleSubmit(onSubmit, onError)}>
       <FormRow Label="Cabin Name" error={errors?.name?.message}>
         <Input
+          disabled={isCreating}
           type="text"
           id="name"
           {...register("name", {
@@ -43,6 +44,7 @@ function CreateCabinForm() {
 
       <FormRow Label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="maxCapacity"
           {...register("maxCapacity", {
@@ -57,6 +59,7 @@ function CreateCabinForm() {
 
       <FormRow Label="Regular price" error={errors?.regularPrice?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="regularPrice"
           {...register("regularPrice", {
@@ -71,6 +74,7 @@ function CreateCabinForm() {
 
       <FormRow Label="Discount" error={errors?.discount?.message}>
         <Input
+          disabled={isCreating}
           type="number"
           id="discount"
           defaultValue={0}
@@ -84,10 +88,16 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow
+        disabled={isCreating}
         Label="Description for website"
         error={errors?.description?.message}
       >
-        <Textarea type="number" id="description" defaultValue="" />
+        <Textarea
+          disabled={isCreating}
+          type="number"
+          id="description"
+          defaultValue=""
+        />
       </FormRow>
 
       <FormRow Label="Cabin Photo">
