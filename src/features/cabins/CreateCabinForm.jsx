@@ -8,7 +8,7 @@ import FormRow from "../../ui/FormROw";
 import { useCreateCabin } from "./useCreateCabin";
 import { useEditCabin } from "./useEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const iseditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -26,15 +26,27 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         { newCabinData: { ...data, image }, id: editId },
         { onSuccess: () => reset() }
       );
-    else createCabin({ ...data, image: image }, { onSuccess: () => reset() });
+    else
+      createCabin(
+        { ...data, image: image },
+        {
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
+        }
+      );
   };
   const onError = (errors) => {
     console.log(errors);
   };
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow Label="Cabin Name" error={errors?.name?.message}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onCloseModal ? "modal" : "regular"}
+    >
+      <FormRow label="Cabin Name" error={errors?.name?.message}>
         <Input
           disabled={isWorking}
           type="text"
@@ -45,7 +57,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow Label="Maximum capacity" error={errors?.maxCapacity?.message}>
+      <FormRow label="Maximum capacity" error={errors?.maxCapacity?.message}>
         <Input
           disabled={isWorking}
           type="number"
@@ -60,7 +72,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow Label="Regular price" error={errors?.regularPrice?.message}>
+      <FormRow label="Regular price" error={errors?.regularPrice?.message}>
         <Input
           disabled={isWorking}
           type="number"
@@ -75,7 +87,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
         />
       </FormRow>
 
-      <FormRow Label="Discount" error={errors?.discount?.message}>
+      <FormRow label="Discount" error={errors?.discount?.message}>
         <Input
           disabled={isWorking}
           type="number"
@@ -92,13 +104,13 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow
         disabled={isWorking}
-        Label="Description for website"
+        label="Description for website"
         error={errors?.description?.message}
       >
         <Textarea type="number" id="description" defaultValue="" />
       </FormRow>
 
-      <FormRow Label="Cabin Photo">
+      <FormRow label="Cabin Photo">
         <FileInput
           id="image"
           accept="image/*"
@@ -111,7 +123,11 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onCloseModal?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isCreating}>

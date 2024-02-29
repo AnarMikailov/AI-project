@@ -1,4 +1,5 @@
 import styled from "styled-components";
+
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
@@ -44,9 +45,5 @@ function FormRow({ label, error, children }) {
     </StyledFormRow>
   );
 }
-// FormRow.propTypes = {
-//   label: PropTypes.string.isRequired,
-//   children: PropTypes.node.isRequired,
-// };
+
 export default FormRow;
-//
